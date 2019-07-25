@@ -37,14 +37,14 @@ def upload():
 def uploadnone():
     if request.method == 'GET':
         files = [f for f in os.listdir('static/data') if '.csv' in f or '.mat' in f]
-        directory = 'static/data/' + session['username']
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        filesPeneliti = [f for f in os.listdir(directory) if '.csv' in f or '.mat' in f]
-        return render_template('uploadnone.html', files=files, filesPeneliti=filesPeneliti)
+        # directory = 'static/data/' + session['username']
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+        # filesPeneliti = [f for f in os.listdir(directory) if '.csv' in f or '.mat' in f]
+        return render_template('uploadnone.html', files=files)
     elif request.method == 'POST':
         file = request.files['file']
-        file.save(os.path.join('static/data/' + session['username'],file.filename))
+        file.save(os.path.join('static/data/',file.filename))
         return redirect('/uploadnone')
 
 # -- Choose Data --
@@ -52,13 +52,13 @@ def uploadnone():
 def choose():
     file = request.args.get('data')
     filepath = ''
-    if 'username' in session:
-        if file in os.listdir('static/data/' + session['username']):
-            session['data'] = 'static/data/' + session['username'] + '/' + file
-        elif file in os.listdir('static/data/'):
-            session['data'] = 'static/data/' + file
-    else:
-        session['data'] = 'static/data/' + file
+    # if 'username' in session:
+    #     # if file in os.listdir('static/data/' + session['username']):
+    #     #     session['data'] = 'static/data/' + session['username'] + '/' + file
+    #     if file in os.listdir('static/data/'):
+    #         session['data'] = 'static/data/' + file
+    # else:
+    session['data'] = 'static/data/' + file
         
     # session['data'] = file
     return redirect('display')
