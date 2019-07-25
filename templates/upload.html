@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Data Information</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Fonts and icons -->
+    <script src="{{ url_for('static', filename='js/plugin/webfont/webfont.min.js')}}"></script>
+    <script>
+        WebFont.load({
+            google: { "families": ["Lato:300,400,700,900"] },
+            custom: { "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ["{{ url_for('static', filename = 'css/fonts.min.css') }}"] },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'atlantis.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'atlantis.min.css') }}">
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/demo.css') }}">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="main-header">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="blue">
+
+                <a href="{{url_for('index')}}" class="logo">
+                    <img src="{{url_for('static', filename='img/logo.svg')}}" alt="navbar brand" class="navbar-brand">
+                </a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
+                    data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="icon-menu"></i>
+                    </span>
+                </button>
+                <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+                <div class="nav-toggle">
+                    <button class="btn btn-toggle toggle-sidebar">
+                        <i class="icon-menu"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- End Logo Header -->
+
+            <!-- Navbar Header -->
+            <nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
+
+                <div class="container-fluid">
+                    <div class="collapse" id="search-nav">
+                    </div>
+                    <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                        <li class="nav-item dropdown hidden-caret">
+                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
+                                aria-expanded="false">
+                                <div class="avatar-sm">
+                                    <img src="{{url_for('static', filename='img/ava.png')}}" alt="..."
+                                        class="avatar-img rounded-circle">
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                <div class="dropdown-user-scroll scrollbar-outer">
+
+                                    <li>
+
+                                        <a class="dropdown-item" href="{{url_for('logout')}}">Logout</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar sidebar-style-2">
+            <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                <div class="sidebar-content">
+                    <!-- <div class="user">
+                        <div class="avatar-sm float-left mr-2">
+                            <img src="{{url_for('static', filename='img/profile.jpg')}}" alt="..."
+                                class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info">
+                            <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                                <span>
+                                    Hizrian
+                                    <span class="user-level">Administrator</span>
+                                    <span class="caret"></span>
+                                </span>
+                            </a>
+                            <div class="clearfix"></div>
+
+                            <div class="collapse in" id="collapseExample">
+                                <ul class="nav">
+                                    <li>
+                                        <a href="#profile">
+                                            <span class="link-collapse">My Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#edit">
+                                            <span class="link-collapse">Edit Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#settings">
+                                            <span class="link-collapse">Settings</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> -->
+                    <ul class="nav nav-primary">
+                        <li class="nav-item">
+                            <a href="{{url_for('index')}}" class="collapsed" aria-expanded="false">
+                                <i class="fas fa-home"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">Main Menu</h4>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="{{url_for('upload')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>List Dataset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">
+                                <i class="fas fa-th-list"></i>
+                                <p>Data Information</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Modeling and Evaluation</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url_for('guide')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Guide</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Sidebar -->
+
+        <!-- Main Panel -->
+        <div class="main-panel">
+            <div class="content">
+                <div class="page-inner">
+                    <div class="page-header">
+                        <h4 class="page-title">Dataset</h4>
+                        <ul class="breadcrumbs">
+                            <li class="nav-home">
+                                <a href="{{url_for('index')}}">
+                                    <i class="flaticon-home"></i>
+                                </a>
+                            </li>
+                            <li class="separator">
+                                <i class="flaticon-right-arrow"></i>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{url_for('upload')}}">List Dataset</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Upload Data</h4>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn btn-default" data-toggle="modal" data-target="#myModal">Only
+                                        Researcher</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">List Dataset</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="basic-datatables" style="overflow-x:auto;"
+                                            class="display table table-striped table-hover">
+                                            <thead>
+                                                <!-- <th>X</th> -->
+                                                {% for element in column %}
+                                                <th>{{ element }}</th>
+                                                {% endfor %}
+                                            </thead>
+                                            <tbody>
+                                                {% for element in files %}
+                                                <a class="list list-group-item"
+                                                    href="{{ url_for('choose') }}?data={{ element }}">{{ element }}</a>
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav class="pull-left">
+                        
+                    </nav>
+                    
+                </div>
+            </footer>
+        </div>
+        <!-- End Custom template -->
+    </div>
+
+    <!-- Modal Login -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal Header</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action='{{ url_for("login") }}' method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Usename</label>
+                            <input class="form-control" type="text" name="username" id="username" autofocus>
+                            <label>Password</label>
+                            <input class="form-control" type="password" name="password" id="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="submit">Login</button>
+                        <button class="btn btn-default" data-toggle="modal" data-target="#signup"
+                            data-dismiss="modal">Signup</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login -->
+    <div id="signup" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Sign Up</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action='{{ url_for("daftar") }}' method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input class="form-control" type="text" name="username" id="username" autofocus>
+                            <label>Password</label>
+                            <input class="form-control" type="password" name="password" id="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Signup</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="{{url_for('static', filename='js/core/jquery.3.2.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/core/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/core/bootstrap.min.js')}}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{{url_for('static', filename='js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+    <script
+        src="{{url_for('static', filename='js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="{{url_for('static', filename='js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+    <!-- Chart JS -->
+    <script src="{{url_for('static', filename='js/plugin/chart.js/chart.min.js')}}"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="{{url_for('static', filename='js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+    <!-- Chart Circle -->
+    <script src="{{url_for('static', filename='js/plugin/chart-circle/circles.min.js')}}"></script>
+
+    <!-- Datatables -->
+    <script src="{{url_for('static', filename='js/plugin/datatables/datatables.min.js')}}"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="{{url_for('static', filename='js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="{{url_for('static', filename='js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+
+    <!-- Sweet Alert -->
+    <script src="{{url_for('static', filename='js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+    <!-- Atlantis JS -->
+    <script src="{{url_for('static', filename='js/atlantis.min.js')}}"></script>
+
+</body>
+
+</html>
