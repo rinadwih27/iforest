@@ -3,7 +3,9 @@ import os, pandas as pd, numpy as np, matplotlib.pyplot as plt, seaborn as sns, 
 import hdf5storage as hd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.ensemble import IsolationForest
@@ -152,11 +154,13 @@ def forest():
         cont = float(request.form['cont'])/100
         n_tree = int(request.form['tree'])
         samples = int(request.form['sample'])
-        data[kelas] = data[kelas].map({0:1,1:-1})
+        
 
         # Normal Abnormal
         dt_normal=data.loc[data[kelas]==int(normal)]
         dt_abnormal=data.loc[data[kelas]==int(abnormal)]
+
+        print(dt_normal)
 
         # Split Data
         normal_train, normal_test = train_test_split(dt_normal, test_size=t_size,random_state=42)
@@ -164,6 +168,7 @@ def forest():
         train = pd.concat([normal_train, abnormal_train])
         test = pd.concat([normal_test, abnormal_test])
         # train[kelas] = train[kelas].map({0:1,1:-1})
+        data[kelas] = data[kelas].map({0:1,1:-1})
         test[kelas] = test[kelas].map({0:1,1:-1})
 
 
@@ -173,10 +178,11 @@ def forest():
         print(pred)
         
         # # Model 2
-        model2 = model.fit(train.drop([kelas],axis=1))
+        model2 = IsolationForest(n_estimators=n_tree, contamination=cont, max_samples=samples)
+        model2.fit(train.drop([kelas],axis=1))
         pred2=model2.predict(test.drop([kelas],axis=1))
 
-        # Hasil Prediksi
+        # # Hasil Prediksi
         dt=data.drop([kelas], axis=1)
         df_pred=pd.DataFrame(pred)
         df_pred.columns=[kelas]
@@ -188,6 +194,14 @@ def forest():
         plt.figure(figsize = (6,4))
         sns.set(font_scale=1.2)
         sns.heatmap(df_cm, annot=True, annot_kws={'size':16},fmt='g')
+        
+        # Random filename
+        filename = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        filename = filename + '.png'
+        # print(filename)
+        plt.savefig(os.path.join('static/img/', filename))
+
+        plt.clf()
 
         # Confusion Matrix 2
         cm2 = confusion_matrix(test[kelas], pred2)
@@ -197,31 +211,56 @@ def forest():
         sns.heatmap(df_cm2, annot=True, annot_kws={'size':16},fmt='g')
 
         # Random filename
-        filename = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
-        filename = filename + '.png'
-        # print(filename)
-        plt.savefig(os.path.join('static/img/', filename))
-
-        # Random filename
         filename2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
         filename2 = filename2 + '.png'
         # print(filename)
         plt.savefig(os.path.join('static/imgv2/', filename2))
         
-        tp, fp, fn, tn = cm.ravel()
-        rec=tp/(tp+fn)
-        rec2=round(rec,3)
-        prec=tp/(tp+fp)
-        prec2=round(prec,3)
-        specificity=tn/(tn+fp)
-        spec2=round(specificity,3)
-        f1_score=2*((prec*rec)/(prec+rec))
-        f1_s=round(f1_score,3)
+        # Convert to Dataframe 
+        df_pred=pd.DataFrame(pred)
+        df_pred2=pd.DataFrame(pred2)
+    
+        # Metrik Evaluasi 1
+        f1_s = f1_score(data.Outcome, df_pred, average='weighted')
+        ps = precision_score(data.Outcome, df_pred, average='weighted')
+        rs = recall_score(data.Outcome, df_pred, average='weighted') 
+
+        # Metrik Evaluasi 2
+        f1_s1 = f1_score(test.Outcome, df_pred2, average='weighted')
+        ps1 = precision_score(test.Outcome, df_pred2, average='weighted')
+        rs1 = recall_score(test.Outcome, df_pred2, average='weighted') 
+
+        # tp, fp, fn, tn = cm.ravel()
+        # rec=tp/(tp+fn)
+        rs=round(rs,3)
+        rs1=round(rs1,3)
+        # prec=tp/(tp+fp)
+        ps=round(ps,3)
+        ps1=round(ps1,3)
+        # f1_score=2*((prec*rec)/(prec+rec))
+        f1_s=round(f1_s,3)
+        f1_s1=round(f1_s1,3)
 
         filepath = 'img/' + filename
         filepath2 = 'imgv2/' + filename2
 
-        return render_template('forest.html', tsize=int(t_size * 100), cont=int(cont * 100), tree=n_tree, sample=samples, dt=dt.values, column=dt.columns, cm=df_cm, spec=spec2, prec=prec2, sens=rec2, f1=f1_s, kelas=kelas, filepath=filepath, filepath2=filepath2)
+        return render_template('forest.html',
+            tsize=int(t_size * 100),
+            cont=int(cont * 100),
+            tree=n_tree,
+            sample=samples,
+            dt=dt.values,
+            column=dt.columns,
+            cm=df_cm,
+            ps=ps,
+            rs=rs,
+            f1_s=f1_s,
+            ps1=ps1,
+            rs1=rs1,
+            f1_s1=f1_s1,
+            kelas=kelas,
+            filepath=filepath,
+            filepath2=filepath2)
 
 @app.route('/login', methods=['POST'])
 def login():
