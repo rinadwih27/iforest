@@ -37,14 +37,14 @@ def upload():
 def uploadnone():
     if request.method == 'GET':
         files = [f for f in os.listdir('static/data') if '.csv' in f or '.mat' in f]
-        directory = 'static/data/' + session['username']
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        filesPeneliti = [f for f in os.listdir(directory) if '.csv' in f or '.mat' in f]
-        return render_template('uploadnone.html', files=files, filesPeneliti=filesPeneliti)
+        # directory = 'static/data/' + session['username']
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+        # filesPeneliti = [f for f in os.listdir(directory) if '.csv' in f or '.mat' in f]
+        return render_template('uploadnone.html', files=files)
     elif request.method == 'POST':
         file = request.files['file']
-        file.save(os.path.join('static/data/' + session['username'],file.filename))
+        file.save(os.path.join('static/data/',file.filename))
         return redirect('/uploadnone')
 
 # -- Choose Data --
@@ -52,13 +52,13 @@ def uploadnone():
 def choose():
     file = request.args.get('data')
     filepath = ''
-    if 'username' in session:
-        if file in os.listdir('static/data/' + session['username']):
-            session['data'] = 'static/data/' + session['username'] + '/' + file
-        elif file in os.listdir('static/data/'):
-            session['data'] = 'static/data/' + file
-    else:
-        session['data'] = 'static/data/' + file
+    # if 'username' in session:
+    #     if file in os.listdir('static/data/' + session['username']):
+    #         session['data'] = 'static/data/' + session['username'] + '/' + file
+    #     elif file in os.listdir('static/data/'):
+    #         session['data'] = 'static/data/' + file
+    # else:
+    session['data'] = 'static/data/' + file
         
     # session['data'] = file
     return redirect('display')
@@ -148,6 +148,7 @@ def forest():
         kelas = request.form['kelas']
         normal = request.form['normal']
         abnormal = request.form['abnormal']
+        t_size = float(request.form['tsize'])/100
         cont = float(request.form['cont'])/100
         n_tree = int(request.form['tree'])
         samples = int(request.form['sample'])
@@ -158,34 +159,54 @@ def forest():
         dt_abnormal=data.loc[data[kelas]==int(abnormal)]
 
         # Split Data
-        normal_train, normal_test = train_test_split(dt_normal, test_size=0.3,random_state=42)
-        abnormal_train, abnormal_test = train_test_split(dt_abnormal, test_size=0.3,random_state=42)
+        normal_train, normal_test = train_test_split(dt_normal, test_size=t_size,random_state=42)
+        abnormal_train, abnormal_test = train_test_split(dt_abnormal, test_size=t_size,random_state=42)
         train = pd.concat([normal_train, abnormal_train])
         test = pd.concat([normal_test, abnormal_test])
-        print(train)
-        print(test)
-        
+        # train[kelas] = train[kelas].map({0:1,1:-1})
+        test[kelas] = test[kelas].map({0:1,1:-1})
+
+
         # Model
-        model = IsolationForest(n_estimators=n_tree,contamination=cont, max_samples=samples)
-        pred=model.fit_predict(data.drop([kelas],axis=1))
+        model = IsolationForest(n_estimators=n_tree, contamination=cont, max_samples=samples)
+        pred = model.fit_predict(data.drop([kelas],axis=1))
+        print(pred)
         
+        # # Model 2
+        model2 = model.fit(train.drop([kelas],axis=1))
+        pred2=model2.predict(test.drop([kelas],axis=1))
+
         # Hasil Prediksi
         dt=data.drop([kelas], axis=1)
         df_pred=pd.DataFrame(pred)
         df_pred.columns=[kelas]
         dt=pd.concat([dt,df_pred],axis=1)
 
-        # Confussion Matrix
+        # Confusion Matrix
         cm = confusion_matrix(data[kelas], pred)
-        df_cm = pd.DataFrame(cm,['Normal','Anomali'],['Prediksi Normal','Prediksi Anomali'])
+        df_cm = pd.DataFrame(cm,['Anomali','Normal'],['Prediksi Anomali','Prediksi Normal'])
         plt.figure(figsize = (6,4))
         sns.set(font_scale=1.2)
         sns.heatmap(df_cm, annot=True, annot_kws={'size':16},fmt='g')
+
+        # Confusion Matrix 2
+        cm2 = confusion_matrix(test[kelas], pred2)
+        df_cm2 = pd.DataFrame(cm2,['Anomali','Normal'],['Prediksi Anomali','Prediksi Normal'])
+        plt.figure(figsize = (6,4))
+        sns.set(font_scale=1.2)
+        sns.heatmap(df_cm2, annot=True, annot_kws={'size':16},fmt='g')
+
         # Random filename
         filename = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
         filename = filename + '.png'
         # print(filename)
         plt.savefig(os.path.join('static/img/', filename))
+
+        # Random filename
+        filename2 = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        filename2 = filename2 + '.png'
+        # print(filename)
+        plt.savefig(os.path.join('static/imgv2/', filename2))
         
         tp, fp, fn, tn = cm.ravel()
         rec=tp/(tp+fn)
@@ -198,8 +219,9 @@ def forest():
         f1_s=round(f1_score,3)
 
         filepath = 'img/' + filename
+        filepath2 = 'imgv2/' + filename2
 
-        return render_template('forest.html', cont=int(cont * 100), tree=n_tree, sample=samples, dt=dt.values, column=dt.columns, cm=df_cm, spec=spec2, prec=prec2, sens=rec2, f1=f1_s, kelas=kelas, filepath=filepath)
+        return render_template('forest.html', tsize=int(t_size * 100), cont=int(cont * 100), tree=n_tree, sample=samples, dt=dt.values, column=dt.columns, cm=df_cm, spec=spec2, prec=prec2, sens=rec2, f1=f1_s, kelas=kelas, filepath=filepath, filepath2=filepath2)
 
 @app.route('/login', methods=['POST'])
 def login():

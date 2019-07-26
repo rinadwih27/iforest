@@ -216,6 +216,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label>Test Size (%)</label>
+                                            <input class="form-control" type="number" name="tsize" id="tsize"
+                                                value="{{ tsize }}">
+                                        </div>
+                                        <div class="form-group">
                                             <label>Contamination (%)</label>
                                             <input class="form-control" type="number" name="cont" id="cont"
                                                 value="{{ cont }}">
@@ -305,10 +310,8 @@
                 </div>
                 <footer class="footer">
                     <div class="container-fluid">
-                        <nav class="pull-left">
-                            
+                        <nav class="pull-left"> 
                         </nav>
-                        
                     </div>
                 </footer>
             </div>
@@ -357,6 +360,7 @@
         <script>
             // var range = document.getElementById('inputpersen')
             // var persenan = document.getElementById('persenan')
+            var tsize = document.getElementById('tsize')
             var cont = document.getElementById('cont')
             var tree = document.getElementById('tree')
             var samples = document.getElementById('samples')
@@ -364,6 +368,10 @@
             // range.value = 36
             // persenan.innerHTML = range.value
 
+            if (tsize.value == '' || cont.value == null) {
+                tsize.value = 30
+            }
+            
             if (cont.value == '' || cont.value == null) {
                 cont.value = 10
             }

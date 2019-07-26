@@ -194,30 +194,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">List Dataset Peneliti</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="basic-datatables" style="overflow-x:auto;"
-                                            class="display table table-striped table-hover">
-                                            <thead>
-                                                <!-- <th>X</th> -->
-                                                {% for element in column %}
-                                                <th>{{ element }}</th>
-                                                {% endfor %}
-                                            </thead>
-                                            <tbody>
-                                                {% for element in filesPeneliti %}
-                                                <a class="list list-group-item"
-                                                    href="{{ url_for('choose') }}?data={{ element }}">{{ element }}</a>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
