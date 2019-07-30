@@ -40,7 +40,8 @@
             <div class="logo-header" data-background-color="blue">
 
                 <a href="{{url_for('index')}}" class="logo">
-                    <img src="{{url_for('static', filename='img/logo.svg')}}" alt="navbar brand" class="navbar-brand">
+                    <img src="{{url_for('static', filename='img/Iforest.svg')}}" alt="navbar brand"
+                        class="navbar-brand">
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -180,13 +181,27 @@
                                 </div>
                                 <div class="card-body">
                                     <br>
-                                    <h10>The app allows you to see the trade-offs on various dataset of outlier / anomaly detection algorithms. </h10>
-                                    <br>
-                                    <h10>This application provides an example dataset that can be used to conduct
-                                        anomalous detection experiments using isolation forest</h10>
-                                    <br>
-                                    <h10>This application also provides settings for Isolation Forest parameters that can
-                                        be changed</h10>
+
+                                    <h10>Isolation Forest is an outlier detection technique that identifies anomalies
+                                        instead of normal observations.
+                                        Similarly to Random Forest, it is built on an ensemble of binary (isolation)
+                                        trees.
+                                        It can be scaled up to handle large, high-dimensional datasets.
+                                        An explanation of the isolation forest algorithm parameters in the sklearn
+                                        library can be seen in the following link :</h10><br>
+                                    <a href=https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html>
+                                        Isolation Forest Ensemble Documentation</a> <br>
+                                        <h10>Related Paper :</h10><br>
+                                        <a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/tkdd11.pdf">Isolation-based
+                                            Anomaly Detection</a>
+                                        <br>
+                                        <h10>Dataset Reference : </h10>
+                                        <br>
+                                        <a href=https://archive.ics.uci.edu/ml/datasets.php>UCI Learning</a> <br>
+                                            <a href=https://www.kaggle.com/uciml/pima-indians-diabetes-database>
+                                                Diabetes</a> <small>-</small>
+                                                <a href=https://www.kaggle.com/>Kaggle </a> <br>
+
                                 </div>
                             </div>
                         </div>
@@ -245,7 +260,7 @@
 </body>
 
 </html>
-<!-- Content -->
+<!-- Content
 <div class="tab-content">
     <div id="home" class="tab-pane fade in active">
         <h4>Welcome</h4>
@@ -260,4 +275,4 @@
 </div>
 </body>
 
-</html>
+</html> -->

@@ -28,6 +28,32 @@ def upload():
         if 'username' in session:
             return redirect('/uploadnone')
         files = [f for f in os.listdir('static/data') if '.csv' in f or '.mat' in f]
+        # listD = []
+        # # listA = []
+        # # listN = []
+        # for idx, f in enumerate(files):
+        #     print(f)
+        #     if f.split('.')[-1] == 'mat':
+        #         print(f)
+        #         mat = hd.loadmat('static/data/'+f)
+        #         df = pd.DataFrame(mat['y'])
+        #         nor = df.loc[df[df.columns[-1]] == 0]
+        #         ano = df.loc[df[df.columns[-1]] == 1]
+        #         normal = len(nor)
+        #         anomali = len(ano)
+        #     elif f.split('.')[-1] == 'csv':
+        #         df = pd.read_csv('static/data/'+f)
+        #         # nor = df.loc[data.columns[-1]==0]
+        #         nor = df.loc[df[df.columns[-1]] == 0]
+        #         # ano = df.loc[data.Outcome==1]
+        #         ano = df.loc[df[df.columns[-1]] == 1]
+        #         normal = len(nor)
+        #         anomali = len(ano)
+        #     listD.append({
+        #         'f': f,
+        #         'n': normal,
+        #         'a': anomali
+        #     })
         # files = []
         # for r, d, f in os.walk('static/data'):
         #     for file in f:
@@ -37,16 +63,67 @@ def upload():
 
 @app.route('/uploadnone', methods=['GET','POST'])
 def uploadnone():
+    
     if request.method == 'GET':
         files = [f for f in os.listdir('static/data') if '.csv' in f or '.mat' in f]
-        # directory = 'static/data/' + session['username']
-        # if not os.path.exists(directory):
-        #     os.makedirs(directory)
-        # filesPeneliti = [f for f in os.listdir(directory) if '.csv' in f or '.mat' in f]
+        # listD = []
+        # # listA = []
+        # # listN = []
+        # for idx, f in enumerate(files):
+        #     print(f)
+        #     if f.split('.')[-1] == 'mat':
+        #         print(f)
+        #         mat = hd.loadmat('static/data/'+f)
+        #         df = pd.DataFrame(mat['y'])
+        #         nor = df.loc[df[df.columns[-1]] == 0]
+        #         ano = df.loc[df[df.columns[-1]] == 1]
+        #         normal = len(nor)
+        #         anomali = len(ano)
+        #     elif f.split('.')[-1] == 'csv':
+        #         df = pd.read_csv('static/data/'+f)
+        #         nor = df.loc[df[df.columns[-1]] == 0]
+        #         ano = df.loc[df[df.columns[-1]] == 1]
+        #         normal = len(nor)
+        #         anomali = len(ano)
+        #     listD.append({
+        #         'f': f,
+        #         'n': normal,
+        #         'a': anomali
+        #     })
+            
         return render_template('uploadnone.html', files=files)
     elif request.method == 'POST':
+        data = pd.read_csv('static/auth/info.csv')
+        info = request.form['info']
+        normal = request.form['normal']
+        anomaly = request.form['anomaly'] 
         file = request.files['file']
-        file.save(os.path.join('static/data/',file.filename))
+        # if file.split('.')[-1] == 'mat':
+        #     print(f)
+        #     mat = hd.loadmat('static/data/'+f)
+        #     df = pd.DataFrame(mat['y'])
+        #     nor = df.loc[df[df.columns[-1]] == 0]
+        #     ano = df.loc[df[df.columns[-1]] == 1]
+        #     normal = len(nor)
+        #     anomaly = len(ano)
+        # elif file.split('.')[-1] == 'csv':
+        #     df = pd.read_csv('static/data/'+f)
+        #     nor = df.loc[df[df.columns[-1]] == 0]
+        #     ano = df.loc[df[df.columns[-1]] == 1]
+        #     normal = len(nor)
+        #     anomaly = len(ano)
+
+        data_info = {
+            'info': [info],
+            'file': [file.filename],
+            'normal': normal,
+            'anomaly': anomaly
+        }
+        
+        data_info = pd.DataFrame.from_dict(data_info)
+        data = pd.concat([data, data_info])
+        data.to_csv('static/auth/info.csv', index=False)
+        file.save(os.path.join('static/data/',file.filename))     
         return redirect('/uploadnone')
 
 # -- Choose Data --
@@ -80,16 +157,18 @@ def display():
         Y.rename(columns={0: 'CLASS'}, inplace=True)
         df = pd.concat([X,Y], axis=1)
     shape = df.shape
+
     desc = df.describe().values
-    descCol = ['count','mean','std','min','25%','50%','75%','max']
-    for idx in range(len (desc)):
-        row = list(desc[idx])
-        row.insert(0,descCol[idx])
-    print(desc[0])
+    lstCol = ['count','mean','std','min','25%','50%','75%','max']
+    lstc = pd.DataFrame(lstCol)
+    descc = pd.DataFrame(desc)
+    lstc.rename(columns={0: 'Stat'}, inplace=True)
+    descr=pd.concat([lstc,descc], axis=1)
+    print(descr)
 
     # -- Standarisasi Data --
     kelas = df.columns[-1]
-    print(df.columns)
+    # print(df.columns)
     sb_x = df.iloc[:,:-2]
     sb_y = df.loc[:,kelas]
     sb_x = StandardScaler().fit_transform(sb_x)
@@ -125,7 +204,7 @@ def display():
     plt.savefig(os.path.join('static/img/', filename_pca))
     filepath = 'img/' + filename_pca
     
-    return render_template('display.html', data=df.values, column=df.columns, shape=shape, descr=desc, desccol=descCol, filepath=filepath)
+    return render_template('display.html', tables=[df.to_html(table_id='dataset', border=0, classes='display table table-striped table-hover')], titles=df.columns.values, data=df.values, column=df.columns, shape=shape, descr=descr.values, filepath=filepath)
 
 @app.route('/forest', methods=['GET','POST'])
 def forest():
@@ -144,7 +223,7 @@ def forest():
         os.remove(os.path.join('static/img/', filename))
     
     if request.method == 'GET':
-        return render_template('forest.html', column=data.columns)
+        return render_template('forest.html', column=data.columns, data=session['data'].split('/')[-1])
     else:
         
         kelas = request.form['kelas']
@@ -155,12 +234,10 @@ def forest():
         n_tree = int(request.form['tree'])
         samples = int(request.form['sample'])
         
-
         # Normal Abnormal
         dt_normal=data.loc[data[kelas]==int(normal)]
         dt_abnormal=data.loc[data[kelas]==int(abnormal)]
-
-        print(dt_normal)
+        # print(dt_normal)
 
         # Split Data
         normal_train, normal_test = train_test_split(dt_normal, test_size=t_size,random_state=42)
@@ -171,14 +248,13 @@ def forest():
         data[kelas] = data[kelas].map({0:1,1:-1})
         test[kelas] = test[kelas].map({0:1,1:-1})
 
-
         # Model
-        model = IsolationForest(n_estimators=n_tree, contamination=cont, max_samples=samples)
+        model = IsolationForest(n_estimators=n_tree, contamination=cont, max_samples=samples, random_state=100)
         pred = model.fit_predict(data.drop([kelas],axis=1))
-        print(pred)
+        # print(pred)
         
         # # Model 2
-        model2 = IsolationForest(n_estimators=n_tree, contamination=cont, max_samples=samples)
+        model2 = IsolationForest(n_estimators=n_tree, contamination=cont, max_samples=samples, random_state=100)
         model2.fit(train.drop([kelas],axis=1))
         pred2=model2.predict(test.drop([kelas],axis=1))
 
@@ -221,14 +297,14 @@ def forest():
         df_pred2=pd.DataFrame(pred2)
     
         # Metrik Evaluasi 1
-        f1_s = f1_score(data.Outcome, df_pred, average='weighted')
-        ps = precision_score(data.Outcome, df_pred, average='weighted')
-        rs = recall_score(data.Outcome, df_pred, average='weighted') 
+        f1_s = f1_score(data[kelas], df_pred, average='weighted')
+        ps = precision_score(data[kelas], df_pred, average='weighted')
+        rs = recall_score(data[kelas], df_pred, average='weighted') 
 
         # Metrik Evaluasi 2
-        f1_s1 = f1_score(test.Outcome, df_pred2, average='weighted')
-        ps1 = precision_score(test.Outcome, df_pred2, average='weighted')
-        rs1 = recall_score(test.Outcome, df_pred2, average='weighted') 
+        f1_s1 = f1_score(test[kelas], df_pred2, average='weighted')
+        ps1 = precision_score(test[kelas], df_pred2, average='weighted')
+        rs1 = recall_score(test[kelas], df_pred2, average='weighted') 
 
         # tp, fp, fn, tn = cm.ravel()
         # rec=tp/(tp+fn)
@@ -244,9 +320,12 @@ def forest():
         filepath = 'img/' + filename
         filepath2 = 'imgv2/' + filename2
 
+        # print(session['data'].split('.')[:-1].join())
+        print(session['data'].split('.'))
+
         return render_template('forest.html',
             tsize=int(t_size * 100),
-            cont=int(cont * 100),
+            cont=float(cont * 100),
             tree=n_tree,
             sample=samples,
             dt=dt.values,
@@ -260,7 +339,8 @@ def forest():
             f1_s1=f1_s1,
             kelas=kelas,
             filepath=filepath,
-            filepath2=filepath2)
+            filepath2=filepath2,
+            data=session['data'].split('/')[-1])
 
 @app.route('/login', methods=['POST'])
 def login():

@@ -39,8 +39,9 @@
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="blue">
 
-                <a href="index.html" class="logo">
-                    <img src="{{url_for('static', filename='img/logo.svg')}}" alt="navbar brand" class="navbar-brand">
+                <a href="{{url_for('index')}}" class="logo">
+                    <img src="{{url_for('static', filename='img/Iforest.svg')}}" alt="navbar brand"
+                        class="navbar-brand">
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,7 +176,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12">
                             <div id='datasetCard' class="card">
                                 <div class="card-header">
@@ -183,7 +184,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="dataset" style="overflow-x:auto;"
+                                        <table id="d" style="overflow-x:auto;"
                                             class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
@@ -205,108 +206,129 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div id='describeCard' class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Data Statistic</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="describe" style="overflow-x:auto;"
-                                            class="display table table-striped table-hover">
-                                            <thead>
-                                                <!-- <th>X</th> -->
-                                                {% for element in column %}
-                                                <th>{{ element }}</th>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id='datasetCard' class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Data Table</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table style="overflow-x:auto;"
+                                                class="display table table-striped table-hover">
+                                                {% for table in tables %}
+                                                {{titles[loop.index]}}
+                                                {{ table|safe }}
                                                 {% endfor %}
-                                            </thead>
-                                            <tbody>
-                                                {% for row in descr %}
-                                                <tr>
-                                                    {% for data in row %}
-                                                    <td>{{ data }}</td>
-                                                    {% endfor %}
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div id='pcaCard' class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">PCA 2D</h4>
+                            <div class="col-md-12">
+                                <div id='describeCard' class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Data Statistic</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="describe" style="overflow-x:auto;"
+                                                class="display table table-striped table-hover">
+                                                <thead>
+                                                    <!-- <th>X</th> -->
+                                                    <th>Stat</th>
+                                                    {% for element in column %}
+                                                    <th>{{ element }}</th>
+                                                    {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                    {% for row in descr %}
+                                                    <tr>
+                                                        {% for data in row %}
+                                                        <td>{{ data }}</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <img src="{{ url_for('static', filename='img/pca.png') }}" alt="">
+                            </div>
+                            <div class="col-md-12">
+                                <div id='pcaCard' class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">PCA 2 Dimention</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ url_for('static', filename=filepath) }}" alt="">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+
+                        </nav>
+
+                    </div>
+                </footer>
             </div>
-            <footer class="footer">
-                <div class="container-fluid">
-                    <nav class="pull-left">
-                        
-                    </nav>
-                    
-                </div>
-            </footer>
+            <!-- End Custom template -->
         </div>
-        <!-- End Custom template -->
-    </div>
 
-    <!--   Core JS Files   -->
-    <script src="{{url_for('static', filename='js/core/jquery.3.2.1.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/core/popper.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/core/bootstrap.min.js')}}"></script>
+        <!--   Core JS Files   -->
+        <script src="{{url_for('static', filename='js/core/jquery.3.2.1.min.js')}}"></script>
+        <script src="{{url_for('static', filename='js/core/popper.min.js')}}"></script>
+        <script src="{{url_for('static', filename='js/core/bootstrap.min.js')}}"></script>
 
-    <!-- jQuery UI -->
-    <script src="{{url_for('static', filename='js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
-    <script
-        src="{{url_for('static', filename='js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
+        <!-- jQuery UI -->
+        <script src="{{url_for('static', filename='js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+        <script
+            src="{{url_for('static', filename='js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js')}}"></script>
 
-    <!-- jQuery Scrollbar -->
-    <script src="{{url_for('static', filename='js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+        <!-- jQuery Scrollbar -->
+        <script src="{{url_for('static', filename='js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
 
 
-    <!-- Chart JS -->
-    <script src="{{url_for('static', filename='js/plugin/chart.js/chart.min.js')}}"></script>
+        <!-- Chart JS -->
+        <script src="{{url_for('static', filename='js/plugin/chart.js/chart.min.js')}}"></script>
 
-    <!-- jQuery Sparkline -->
-    <script src="{{url_for('static', filename='js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+        <!-- jQuery Sparkline -->
+        <script src="{{url_for('static', filename='js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
 
-    <!-- Chart Circle -->
-    <script src="{{url_for('static', filename='js/plugin/chart-circle/circles.min.js')}}"></script>
+        <!-- Chart Circle -->
+        <script src="{{url_for('static', filename='js/plugin/chart-circle/circles.min.js')}}"></script>
 
-    <!-- Datatables -->
-    <script src="{{url_for('static', filename='js/plugin/datatables/datatables.min.js')}}"></script>
+        <!-- Datatables -->
+        <script src="{{url_for('static', filename='js/plugin/datatables/datatables.min.js')}}"></script>
 
-    <!-- Bootstrap Notify -->
-    <script src="{{url_for('static', filename='js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+        <!-- Bootstrap Notify -->
+        <script src="{{url_for('static', filename='js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
-    <!-- jQuery Vector Maps -->
-    <script src="{{url_for('static', filename='js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
+        <!-- jQuery Vector Maps -->
+        <script src="{{url_for('static', filename='js/plugin/jqvmap/jquery.vmap.min.js')}}"></script>
+        <script src="{{url_for('static', filename='js/plugin/jqvmap/maps/jquery.vmap.world.js')}}"></script>
 
-    <!-- Sweet Alert -->
-    <script src="{{url_for('static', filename='js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+        <!-- Sweet Alert -->
+        <script src="{{url_for('static', filename='js/plugin/sweetalert/sweetalert.min.js')}}"></script>
 
-    <!-- Atlantis JS -->
-    <script src="{{url_for('static', filename='js/atlantis.min.js')}}"></script>
+        <!-- Atlantis JS -->
+        <script src="{{url_for('static', filename='js/atlantis.min.js')}}"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#dataset').DataTable({
-            });
-            // $('#describe').DataTable({
-            // });
-        })
-    </script>
+        <script>
+            $(document).ready(function () {
+                $('#dataset').DataTable({
+                });
+                // $('#describe').DataTable({
+                // });
+            })
+        </script>
 
 </body>
 

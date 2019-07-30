@@ -40,7 +40,7 @@
             <div class="logo-header" data-background-color="blue">
 
                 <a href="{{url_for('index')}}" class="logo">
-                    <img src="{{url_for('static', filename='img/logo.svg')}}" alt="navbar brand" class="navbar-brand">
+                    <img src="{{url_for('static', filename='img/Iforest.svg')}}" alt="navbar brand" class="navbar-brand">
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,32 +110,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url_for('display')}}">
+                            <a href="#" data-toggle="tooltip" title="The dataset has not been selected">
                                 <i class="fas fa-th-list"></i>
                                 <p>Data Information</p>
                             </a>
-                            <div class="collapse" id="sidebarLayouts">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="{{url_for('display')}}">
-                                            <span class="sub-item">Data Table</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{url_for('display')}}">
-                                            <span class="sub-item">Data Describe</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{url_for('display')}}">
-                                            <span class="sub-item">PCA</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url_for('forest')}}">
+                            <a href="#" data-toggle="tooltip" title="The dataset has not been selected">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Modeling and Evaluation</p>
                             </a>
@@ -174,16 +155,17 @@
                                 </div>
                                 <div class="card-body">
                                     <br>
-                                    <h10>Anomaly detection application using the Isolation Forest algorithm is an
-                                        application with the aim of facilitating learning and observing the performance
-                                        of isolation forest algorithms </h10>
+                                    <small>PROGRAM FOR ANALYZING ISOLATION FOREST AS ANOMALY DETECTION ALGORITHM 
+                                        is an application that aims to facilitate users to study and observe 
+                                        the performance of the Isolation Forest algorithm </small>
                                     <br>
-                                    <h10>This application provides an example dataset that can be used to conduct
-                                        anomalous detection experiments using isolation forest</h10>
                                     <br>
-                                    <h10>This application also provides settings for Isolation Forest parameters that
-                                        can
-                                        be changed</h10><br>
+                                    <small> - This application provides an example dataset that can be used to conduct
+                                        anomalous detection experiments using isolation forest</small>
+                                    <br>
+                                    <small> - This application also provides settings for Isolation Forest parameters that
+                                        can be changed</small><br><br>
+                                    <small>For more information on how to use this web, take a look at the guide section.</small>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +226,7 @@
 </body>
 
 </html>
-<!-- Content -->
+<!-- Content
 <div class="tab-content">
     <div id="home" class="tab-pane fade in active">
         <h4>Welcome</h4>
@@ -259,4 +241,4 @@
 </div>
 </body>
 
-</html>
+</html> -->
