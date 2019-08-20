@@ -139,8 +139,9 @@ def choose():
     # else:
     session['data'] = 'static/data/' + file
         
+    
     # session['data'] = file
-    return redirect('display')
+    return redirect('display', info=file.info ,nor=file.normal , ano=file.anomaly )
     
 #  -- Display Choosen Data --
 @app.route('/display')
